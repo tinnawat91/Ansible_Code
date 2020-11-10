@@ -9,4 +9,4 @@
 
     - name: Debug result
       debug:
-        msg: "{{ ansible_ }}"
+        msg: "{{ ansible_default_ipv4['address'] }}"
