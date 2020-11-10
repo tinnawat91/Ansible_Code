@@ -1,0 +1,12 @@
+---
+- name: Managed host
+  hosts: centos
+  gather_facts: True
+  tasks:
+    - name: Print message
+      setup:
+      register: result
+
+    - name: Debug result
+      debug:
+        msg: "{{ ansible_ }}"

@@ -1,5 +1,5 @@
 ---
 - name: Install RabbitMQ
-  hosts: centos
+  hosts: centos3
   roles:
     - install_rabbitmq
