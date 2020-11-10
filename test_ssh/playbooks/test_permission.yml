@@ -1,0 +1,11 @@
+---
+- name: test permission
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Test permission
+      command: id
+      register: this
+      changed_when: false
+      #      become: true
+    - debug: var=this.stdout

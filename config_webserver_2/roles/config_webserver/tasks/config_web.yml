@@ -1,0 +1,68 @@
+---
+- name: Check httpd is running
+  shell:
+    rpm -q httpd
+  register: rpm_check
+  failed_when: rpm_check.rc == 1
+
+- block:
+    - name: Copy https.conf to /etc/httpd/conf.d/https.conf
+      template:
+        src: https.j2
+        dest: /etc/httpd/conf.d/https.conf
+        force: yes
+
+    - name: Create folder /etc/httpd/conf.d/ssl
+      file:
+        path: /etc/httpd/conf.d/ssl
+        state: directory
+        mode: 0755
+
+    - name: Create folder /var/www/html/logs
+      file:
+        path: /var/www/html/logs
+        state: directory
+        mode: 0755
+    
+    - name: Check ssl  file in /etc/httpd/conf.d/ssl.conf
+      stat:
+        path: /etc/httpd/conf.d/ssl.conf
+      register: ssl_file
+
+    - name: Clear ssl.conf
+      shell:
+        mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
+      when: ssl_file.stat.exists
+
+    - name: Generate private key
+      openssl_privatekey:
+        path: /etc/httpd/conf.d/ssl/server.key
+        size: 4096
+        type: RSA
+        backup: yes
+
+    - name: Generate csr
+      openssl_csr:
+        path: /etc/httpd/conf.d/ssl/server.csr
+        privatekey_path: /etc/httpd/conf.d/ssl/server.key
+        country_name: TH
+        organization_name: Test Inc.
+        email_address: test@gmail.com
+        common_name: "{{ ansible_default_ipv4.address }}"
+
+    - name: Generate crt
+      openssl_certificate:
+        path: /etc/httpd/conf.d/ssl/server.crt
+        privatekey_path: /etc/httpd/conf.d/ssl/server.key
+        csr_path: /etc/httpd/conf.d/ssl/server.csr
+        provider: selfsigned
+
+    - name: Copy content to /var/www/html/index.html
+      copy:
+        content: "{{ inventory_hostname }} ({{ ansible_default_ipv4.address }}) has been customized by Ansible.\n"
+        dest: /var/www/html/index.html
+        force: yes
+      notify:
+        - restart_services
+
+  when: rpm_check.rc == 0

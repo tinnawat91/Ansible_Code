@@ -1,0 +1,10 @@
+---
+- name: LAB2 Deploying Ansible
+  hosts: all
+  gather_facts: false
+  become: true
+  
+  roles:
+    - role: lab02
+      vars:
+        name_file_from_template: ansible_version

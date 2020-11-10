@@ -1,0 +1,8 @@
+---
+# handlers file for roles/config_webserver
+- name: restart_services
+  service:
+    name: "{{ item }}"
+  loop:
+    - httpd
+    - firewalld

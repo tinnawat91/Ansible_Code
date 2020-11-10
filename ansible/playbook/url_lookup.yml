@@ -1,0 +1,17 @@
+--- 
+- name: test url lookup 
+  hosts: localhost 
+  gather_facts: no 
+  vars:
+    amazon_ip_ranges: "{{ lookup('url', 'https://ip-ranges.amazonaws.com/ip-ranges.json', split_lines=false) }}"
+  tasks:
+    - name: Display IPv4 ranges
+      debug:
+        msg: "{{ item['ip_prefix'] }}"
+      loop: "{{ amazon_ip_ranges['prefixes'] }}"
+    - name: Display IPv6 ranges
+      debug:
+        msg: "{{ item['ipv6_prefix'] }}"
+      loop: "{{ amazon_ip_ranges['ipv6_prefixes'] }}"
+
+

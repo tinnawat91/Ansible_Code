@@ -1,0 +1,39 @@
+--- 
+- name: Install rabbitmq 
+  hosts: centos2
+  gather_facts: False
+  vars:
+    rabbitmq_package: rabbitmq-server-3.8.9-1.el8.noarch.rpm
+  tasks:
+
+    - name: Install epel-release package
+      dnf:
+        name: epel-release
+        state: latest
+    
+    - name: Update all package
+      dnf:
+        name: '*'
+        state: latest
+        update_cache: yes 
+
+    - name: Install erlang
+      dnf:
+        name: erlang
+        state: latest
+
+    - name: Add packagecloud GPG key
+      rpm_key:
+        key: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+        state: present
+
+    - name: Install rabbitmq-server
+      dnf:
+        name: rabbitmq-server
+        state: latest 
+
+    - name: Start rabbitmq-server
+      service:
+        name: rabbitmq-server
+        state: started 
+        enabled: True

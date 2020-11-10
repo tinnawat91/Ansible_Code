@@ -1,0 +1,13 @@
+# Apache HTTPS Configuration
+
+Listen {{ ansible_default_ipv4.address }}:443
+NameVirtualHost {{ inventory_hostname }}
+
+<VirtualHost {{ inventory_hostname }}:443>
+  ServerName {{ inventory_hostname }}
+  DocumentRoot /var/www/html
+  SSLEngine on
+  SSLCertificateFile /etc/httpd/conf.d/ssl/server.crt
+  SSLCertificateKeyFile /etc/httpd/conf.d/ssl/server.key
+  SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+</VirtualHost>

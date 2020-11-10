@@ -1,0 +1,8 @@
+--- 
+- name: Deploy Ansible 
+  hosts: all 
+  tasks: 
+    - name: Copy messages
+      copy:
+        content: "This server is managed by Ansible.\n"
+        dest: /etc/motd

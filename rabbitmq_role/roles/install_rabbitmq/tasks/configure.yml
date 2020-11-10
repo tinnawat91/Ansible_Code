@@ -1,0 +1,51 @@
+---
+- name: Start firewall service
+  service:
+    name: "{{ firewall_service }}"
+    state: started
+    enabled: true
+    
+- name: Start RabbitMQ service
+  service:
+    name: "{{ rabbitmq_service }}"
+    state: started
+    enabled: true  
+
+- name: Allow port on firewalld
+  firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop:  "{{ ports }}"
+
+          #   - 1883
+          #   - 4369
+          #   - 5671
+          #   - 5672
+          #   - 8883
+          #   - 15672
+          #   - 25672
+          #   - 61613
+          #   - 61614
+
+  notify:
+    - restart_services
+ 
+- name: Enable rabbitmq plugin
+  rabbitmq_plugin:
+    names: rabbitmq_management 
+    state: enabled
+  notify:
+    - restart_services
+
+- name: Add user
+  rabbitmq_user:
+    user: joe
+    password: changeme
+    tags: administrator
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present

@@ -1,0 +1,21 @@
+---
+# tasks file for roles/config_webserver
+- block:
+    - import_tasks: install_packages.yml
+
+    - import_tasks: config_web.yml
+
+    - import_tasks: config_firewall.yml
+
+  rescue:
+    - name: Install httpd
+      yum:
+        name: "{{ web_package }}"
+        state: latest
+      notify:
+        - restart_services
+
+    - debug:
+        msg: "Import tasks errors!! Installing httpd service manually"
+
+

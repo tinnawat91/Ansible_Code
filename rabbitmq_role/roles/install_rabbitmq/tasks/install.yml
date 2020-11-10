@@ -1,0 +1,19 @@
+---
+- name: Install packages
+  dnf:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - "{{ packages }}"
+  failed_when:
+    - "{{ ansible_memory_mb.real.total }} < {{ memory }}"
+
+- name: Add rabbitmq GPG key
+  rpm_key:
+    key: "{{ key }}"
+    state: present
+
+- name: Install rabbitmq
+  yum:
+    name: "{{ rabbitmq_package }}"
+    state: present

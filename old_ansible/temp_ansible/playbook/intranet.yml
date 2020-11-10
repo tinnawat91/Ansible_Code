@@ -1,0 +1,44 @@
+--- 
+- name: Enable instranet services 
+  hosts: centos2 
+  tasks: 
+    - name: latest version of httpd and firewalld installed
+      dnf:
+        name:
+          - httpd
+          - firewalld
+        state: latest
+
+    - name: test html page is installed
+      copy:
+        content: "welcome to the example.com intranet!\n"
+        dest: /var/www/html/index.html
+
+    - name: firewalld enabled and running
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: firewalld permits http services
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: yes
+
+    - name: httpd enabled and running
+      service:
+        name: httpd
+        enabled: true
+        state: started
+
+- name: Test intranet web server
+  hosts: localhost
+  become: no
+  tasks:
+    - name: connect to intranet web server
+      uri:
+        url: http://192.168.93.129
+        return_content: yes
+        status_code: 200

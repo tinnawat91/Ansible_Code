@@ -1,0 +1,11 @@
+--- 
+- name: Wxample of a lookup plugin in use 
+  hosts: localhost 
+  gather_facts: true 
+  vars:
+    mxvar: "{{ query('dig, 'gmail.com', 'qtype=MX') }}"
+  tasks:
+    - name: List each MX record for gmail.com
+      debug:
+        msg: "An MX record is: {{ item }}"
+      loop: "{{ mxvar }}"

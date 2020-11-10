@@ -1,0 +1,20 @@
+---
+- name: Install firewall package
+  yum:
+    name: "{{ firewall_package}}"
+    state: latest
+
+- name: Start firewall service
+  service:
+    name: "{{ firewall_service }}"
+    state: started
+
+- name: Allow http and https to pass firewal
+  firewalld:
+    service: "{{ item }}"
+    permanent: True
+    immediate: True
+    state: enabled
+  loop:
+    - http
+    - https

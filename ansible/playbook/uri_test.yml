@@ -1,0 +1,14 @@
+--- 
+- name: Test uri module 
+  hosts: localhost 
+  gather_facts: false 
+  tasks:
+    - name: Check that you can connect (GET) to a page and ot returns a status 200
+      uri:
+        url: http://www.example.com
+        return_content: yes
+      register: this
+     
+    - fail:
+        msg: "AWESOME NOT IN CONTENT"
+      when: "'AWESOME' not in this.content"

@@ -1,0 +1,59 @@
+---
+- shell:
+    rpm -q httpd
+  register: rpm_check
+  failed_when: rpm_check.rc == 1
+
+- block:
+    - template:
+        src: "{{ https_src }}"
+        dest: /etc/httpd/conf.d/https.conf
+        force: yes
+
+    - file:
+        path: /etc/httpd/conf.d/ssl
+        state: directory
+        mode: 0755
+
+    - file:
+        path: /var/www/html/logs
+        state: directory
+        mode: 0755
+
+    - stat:
+        path: /etc/httpd/conf.d/ssl.conf
+      register: ssl_file
+
+    - shell:
+        mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
+      when: ssl_file.stat.exists
+
+    - openssl_privatekey:
+        path: /etc/httpd/conf.d/ssl/server.key
+        size: 4096
+        type: RSA
+        backup: yes
+
+    - openssl_csr:
+        path: /etc/httpd/conf.d/ssl/server.csr
+        privatekey_path: /etc/httpd/conf.d/ssl/server.key
+        country_name: TH
+        organization_name: Test Inc.
+        email_address: tinnawat@gmail.com
+        common_name: "{{ ansible_default_ipv4.address }}"
+
+    - openssl_certificate:
+        path: /etc/httpd/conf.d/ssl/server.crt
+        privatekey_path: /etc/httpd/conf.d/ssl/server.key
+        csr_path: /etc/httpd/conf.d/ssl/server.csr
+        provider: selfsigned
+      notify:
+        - restart_service
+
+    - copy:
+        content: "{{ inventory_hostname }} ({{ ansible_default_ipv4.address}}) has been customized by Ansible\n"
+        dest: /var/www/html/index.html
+
+  when:
+    rpm_check.rc == 0
+

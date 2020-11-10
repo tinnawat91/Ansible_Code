@@ -1,0 +1,7 @@
+---
+- name: test facts
+  hosts: localhost
+  tasks:
+    - debug:
+        msg:
+          - "{{ ansible_all_ipv4_addresses }}"

@@ -1,0 +1,3 @@
+---
+vault_ansible_password: ubuntu
+vault_ansible_become_password: ubuntu

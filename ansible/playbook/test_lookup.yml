@@ -1,0 +1,17 @@
+--- 
+- name: test lookup 
+  hosts: localhost 
+  gather_facts: false 
+  tasks:
+    - name: Print the name of each account in /etc/passwd
+      debug:
+              #regex_replace('')=ignore in ('')
+              #regex_replace('') means cut output that start with ":"
+              #"." means any character
+              #"*" means zero or more occurences
+              #"$" means ends with
+              # msg: A user is {{ item | regex_replace(':.*$') }}
+        msg: "{{ query('lines', 'cat /etc/passwd') }}"
+        #loop: "{{ query('lines','cat /etc/passwd') }}"
+        #loop: "{{ lookup('file','/etc/passwd') }}"
+

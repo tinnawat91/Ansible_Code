@@ -1,0 +1,38 @@
+---
+# tasks file for lab02
+- name: Install necessary packages
+  dnf:
+    name:
+      - "{{ python_pkg }}"
+      - "{{ repo_pkg }}"
+    state: latest
+  notify:
+    - necessary packages triggered
+
+- name: Install ansible package
+  dnf:
+    name:
+      - "{{ ansible_pkg }}"
+    state: latest
+  notify:
+    - ansible package triggered
+
+- name: Gather ansible version
+  command: ansible --version
+  register: this
+  changed_when: false
+
+- name: Show ansible version
+  debug:
+    msg:
+      - "{{ this.stdout_lines[0].split()[1] }}"
+
+- name: Lookup template
+  debug:
+    msg:
+      - "{{ lookup('template','/home/tinnawat/course/test_ssh/playbooks/roles/lab02/templates/ansible.j2') }}"
+
+- name: Craete file from template
+  template:
+    src: /home/tinnawat/course/test_ssh/playbooks/roles/lab02/templates/ansible.j2
+    dest: "/home/tinnawat/{{ name_file_from_template }}"

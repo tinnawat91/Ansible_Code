@@ -1,0 +1,8 @@
+#user that control remote to (e.g. ssh tinnawat@ip)
+ansible_user: tinnawat
+#ssh with root privilege
+ansible_become: true
+ansible_become_method: sudo
+ansible_become_user: root
+#privilege password -> located in vault
+ansible_become_password: "{{ vault_ansible_become_password }}"

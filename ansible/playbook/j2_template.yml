@@ -1,0 +1,9 @@
+--- 
+- name: Template and facts 
+  hosts: centos2 
+  gather_facts: true 
+  tasks:
+    - name: Ensure /etc/motd is correct
+      template:
+        src: /home/tinnawat/course/ansible/templates/motd.j2
+        dest: /etc/motd

@@ -1,0 +1,9 @@
+---
+# vars file for roles/config_webserver
+web_package: httpd
+ssl_package: mod_ssl
+openssl_package: openssl
+web_service: httpd
+firewall_package: firewalld
+firewall_service: firewalld
+memory: 256

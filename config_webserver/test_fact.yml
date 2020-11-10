@@ -1,0 +1,8 @@
+---
+- hosts: webserver
+  tasks:
+    - service_facts:
+      register: service_state
+
+    - debug:
+            msg: var= "{{ service_state.ansible_facts.services }}"

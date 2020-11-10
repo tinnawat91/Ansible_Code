@@ -1,0 +1,11 @@
+---
+# handlers file for lab02
+- name: necessary packages triggered
+  debug:
+    msg:
+      - "Necessary packages is TRIGGRED!!!"
+
+- name: ansible package triggered
+  debug:
+    msg:
+      - "Ansible package is TRIGGERED!!!"

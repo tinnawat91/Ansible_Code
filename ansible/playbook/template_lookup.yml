@@ -1,0 +1,8 @@
+--- 
+- name: Print template 
+  hosts: localhost,centos2,ubuntu2 
+  gather_facts: true 
+  tasks:
+    - name: Demonstrate template lookup plugin
+      debug:
+        msg: "{{ lookup('template', '/home/tinnawat/course/ansible/templates/motd.j2').splitlines() }}"

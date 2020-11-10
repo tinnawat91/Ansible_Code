@@ -1,0 +1,26 @@
+---
+- name: Create playbook template
+  hosts: localhost
+  vars_prompt:
+    - name: Name
+      prompt: What is the name of playbook?
+      private: no
+
+    - name: Title
+      prompt: What is the title of playbook?
+      private: no
+
+    - name: Host
+      prompt: Which host in playbook that craeted?
+      private: no
+
+  tasks:
+    - name: Create Playbook
+      copy:
+        content:
+          "---
+          \n- name: {{ Title }}
+          \n  hosts: {{ Host }}
+          \n  tasks:
+          \n    - name: "
+        dest: /home/tinnawat/course/ansible/playbook/{{ Name }}.yml

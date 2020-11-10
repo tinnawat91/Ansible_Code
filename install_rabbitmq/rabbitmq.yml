@@ -1,0 +1,78 @@
+---
+- name: Install rabbitmq on centos
+  hosts: centos3
+  tasks:
+
+    - name: Install required package
+      dnf:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - epel-release
+        - erlang
+        - firewalld
+      failed_when:
+        - "{{ ansible_memory_mb.real.total }} < 256 "
+
+    - name: Add GPG key
+      rpm_key:
+        key: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+        state: present
+          
+    - name: Install rabbitmq
+      yum:
+        name: https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.9/rabbitmq-server-3.8.9-1.el8.noarch.rpm
+        state: present
+
+    - name: Start service
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: True
+      loop:
+        - firewalld
+        - rabbitmq-server
+
+    - name: Allow port on firewalld
+      firewalld:
+        port: "{{ item }}/tcp"
+        permanent: true
+        immediate: true
+        state: enabled
+      loop:
+        - 1883
+        - 4369
+        - 5671
+        - 5672
+        - 8883
+        - 15672
+        - 25672
+        - 61613
+        - 61614
+     
+    - name: Enable rabbitmq plugins
+      rabbitmq_plugin:
+        names: rabbitmq_management
+        state: enabled
+      notify:
+        - restart_service
+
+    - name: Add user
+      rabbitmq_user:
+        user: joe
+        password: changeme
+        tags: administrator
+        vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+        state: present
+        
+  handlers:
+    - name: restart_service
+      service:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - firewalld
+        - rabbitmq-server

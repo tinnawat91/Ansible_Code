@@ -1,0 +1,32 @@
+---
+- name: Create playbook template
+  hosts: localhost
+  gather_facts: false
+  vars_prompt:
+
+     - name: Name
+       prompt: "What name of playbook?"
+       private: no
+     
+     - name: Title
+       prompt: "What title of playbook?"
+       private: no
+
+     - name: Host
+       prompt: "Which host that will define in this playbook?"
+       private: no
+
+     - name: Fact
+       prompt: "Gather_facts (true or false)"
+       private: no
+
+  tasks:
+    - name: Create playbook
+      copy:
+        content:
+          "---
+          \n- name: {{ Title }}
+          \n  hosts: {{ Host }}
+          \n  gather_facts: {{ Fact }}
+          \n  tasks:"
+        dest: ./playbook/{{ Name }}.yml

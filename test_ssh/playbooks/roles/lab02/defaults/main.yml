@@ -1,0 +1,6 @@
+---
+# defaults file for lab02
+python_pkg: python3
+repo_pkg: epel-release
+ansible_pkg: ansible
+name_file_from_template: ansible

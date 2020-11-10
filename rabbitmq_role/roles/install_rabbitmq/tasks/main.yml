@@ -1,0 +1,32 @@
+---
+# tasks file for roles/install_rabbitmq
+- name: Import install tasks
+  import_tasks: install.yml
+  vars:
+    memory: 256
+    packages:
+      - epel-release
+      - erlang
+      - firewalld
+    key: https://www.rabbitmq.com/rabbitmq-release-signing-key.asc
+    rabbitmq_package: https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.8.9/rabbitmq-server-3.8.9-1.el8.noarch.rpm
+
+- name: Import configure tasks
+  import_tasks: configure.yml
+  vars:
+    firewall_service: firewalld
+    rabbitmq_service: rabbitmq-server
+    ports:
+      - 1883
+      - 4369
+      - 5671
+      - 5672
+      - 8883
+      - 15672
+      - 25672
+      - 61613
+      - 61614
+
+
+      
+

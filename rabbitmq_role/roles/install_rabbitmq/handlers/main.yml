@@ -1,0 +1,9 @@
+---
+# handlers file for roles/install_rabbitmq
+- name: restart_services
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - "{{ firewall_service }}"
+    - "{{ rabbitmq_service }}"

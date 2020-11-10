@@ -1,0 +1,8 @@
+- name: Installs the httpd package
+  dnf:
+    name: httpd
+    state: latest
+- name: Starts the httpd service
+  service:
+    name: httpd
+    state: started

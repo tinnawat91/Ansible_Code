@@ -1,0 +1,12 @@
+--- 
+- name: Example debug module 
+  hosts: localhost
+  tasks: 
+    - name: Display free memory
+      debug:
+        msg: "The free memory for this system is {{ ansible_facts['memfree_mb'] }}"
+      register: output
+    - name: Display the "output" variable
+      debug:
+        var: output
+        verbosity: 2

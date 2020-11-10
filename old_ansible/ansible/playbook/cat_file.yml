@@ -1,0 +1,9 @@
+--- 
+- name: Cat File 
+  hosts: localhost
+  tasks: 
+    - name: Cat File
+      command: cat /etc/motd
+      register: var
+
+    - debug: var=var.stdout

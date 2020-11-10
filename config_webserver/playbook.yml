@@ -1,0 +1,50 @@
+---
+- name: Config webserver
+  hosts: webservers
+  become: yes
+  tasks:
+    - block:
+        - import_tasks: install_packages.yml
+          vars:
+            memory: 256
+            web_package: httpd
+            ssl_package: mod_ssl
+            openssl_package: openssl
+            web_service: httpd
+
+        - import_tasks: configure_web.yml
+          vars:
+            https_src: ./https.j2
+
+        - import_tasks: configure_firewall.yml
+          vars:
+            fw_package: firewalld
+            fw_service: firewalld
+          tags: production
+            # if block fail rescue will execute            
+      rescue:
+        - yum:
+            name: httpd
+            state: latest
+          notify:
+            - restart_service
+
+        - debug:
+            msg: "Failed to import and run all tasks.\n installing the web server manually"
+
+      always:
+        - shell:
+            cmd: "systemctl status httpd"
+          register: result
+          notify:
+            - restart_service
+
+        - debug:
+            msg: "Service is running"
+          
+  handlers:
+    - name: restart_service
+      service:
+        name: "{{ item }}"
+      loop:
+        - httpd
