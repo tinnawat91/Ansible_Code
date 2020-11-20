@@ -1,0 +1,60 @@
+---
+- name: Test install elasticsearch
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Update packages
+      dnf:
+        name: '*'
+        state: latest
+
+    - name: Install openjdk 8
+      dnf: 
+        name: java-1.8.0-openjdk
+        state: latest
+
+    - name: Import key
+      rpm_key:
+        key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Create repo
+      copy:
+        src: elasticsearch.repo
+        dest: /etc/yum.repos.d/elasticsearch.repo
+
+    - name: Update repo
+      dnf:
+        name: '*'
+        state: latest
+
+    - name: Install elasticsearch
+      dnf:
+        name: elasticsearch
+        state: latest
+
+    - name: Start service
+      service:
+        name: elasticsearch
+        state: started
+
+    - name: Enable port on firewall
+      firewalld:
+        service: elasticsearch
+        permanent: yes
+        immediate: yes
+        state: enabled
+
+    - name: Wait 1 minute
+      wait_for:
+        timeout: 60
+    
+    - name: Check elasticsearch
+      uri:
+        url: http://localhost:9200
+        return_content: yes
+      register: this
+
+    - name: Show result
+      debug: 
+        var: this
