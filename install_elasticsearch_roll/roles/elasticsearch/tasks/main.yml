@@ -1,0 +1,26 @@
+---
+# tasks file for roles/elasticsearch
+- block:
+    - import_tasks: config_repo.yml
+
+    - import_tasks: install_packages.yml
+
+    - import_tasks: config_firewall.yml
+
+    - name: Wait 1 minute
+      wait_for:
+        timeout: 60
+    
+    - name: Check elasticsearch
+      uri:
+        url: http://localhost:9200
+        return_content: yes
+      register: this
+
+    - name: Show result
+      debug: 
+        var: this
+        
+  rescue:
+    - debug:
+        msg: "Installation Error!!!"

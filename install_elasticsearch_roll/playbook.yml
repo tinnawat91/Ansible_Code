@@ -1,0 +1,6 @@
+---
+- name: Configure web server
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - roles/elasticsearch

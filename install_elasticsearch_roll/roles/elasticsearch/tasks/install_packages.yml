@@ -1,0 +1,14 @@
+- name: Install openjdk 8
+  dnf: 
+    name: java-1.8.0-openjdk
+    state: latest
+
+- name: Install elasticsearch
+  dnf:
+    name: elasticsearch
+    state: latest
+
+- name: Start service
+  service:
+    name: elasticsearch
+    state: started

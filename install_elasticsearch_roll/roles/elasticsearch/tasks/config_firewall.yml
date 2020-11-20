@@ -1,0 +1,17 @@
+- name: Install firewalld
+  dnf: 
+    name: firewalld
+    state: latest
+
+- name: Start firewall service
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Allow elasticsearch on firewall
+  firewalld:
+    service: elasticsearch
+    permanent: True
+    immediate: True
+    state: enabled

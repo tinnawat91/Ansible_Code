@@ -1,0 +1,19 @@
+- name: Update packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Import key
+  rpm_key:
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Create repo
+  copy:
+    src: elasticsearch.repo
+    dest: /etc/yum.repos.d/elasticsearch.repo
+
+- name: Update repo
+  dnf:
+    name: '*'
+    state: latest
