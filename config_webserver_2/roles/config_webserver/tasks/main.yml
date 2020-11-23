@@ -17,5 +17,3 @@
 
     - debug:
         msg: "Import tasks errors!! Installing httpd service manually"
-
-

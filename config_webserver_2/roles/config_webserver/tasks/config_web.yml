@@ -1,7 +1,6 @@
 ---
 - name: Check httpd is running
-  shell:
-    rpm -q httpd
+  shell: rpm -q httpd
   register: rpm_check
   failed_when: rpm_check.rc == 1
 
@@ -23,15 +22,14 @@
         path: /var/www/html/logs
         state: directory
         mode: 0755
-    
+
     - name: Check ssl  file in /etc/httpd/conf.d/ssl.conf
       stat:
         path: /etc/httpd/conf.d/ssl.conf
       register: ssl_file
 
     - name: Clear ssl.conf
-      shell:
-        mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
+      shell: mv /etc/httpd/conf.d/ssl.conf /etc/httpd/conf.d/ssl.conf.bak
       when: ssl_file.stat.exists
 
     - name: Generate private key

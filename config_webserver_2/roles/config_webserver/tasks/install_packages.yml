@@ -13,4 +13,3 @@
   service:
     name: "{{ web_service }}"
     state: started
-
