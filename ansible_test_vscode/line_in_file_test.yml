@@ -1,0 +1,10 @@
+---
+- name: Test line in file
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: test line in file
+      lineinfile:
+        path: ./test.txt
+        regexp: '^#test5'
+        line: Newtest5=Newvalue
