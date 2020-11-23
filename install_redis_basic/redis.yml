@@ -1,0 +1,6 @@
+--- 
+- name: Install redis with roll
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - roles/redis

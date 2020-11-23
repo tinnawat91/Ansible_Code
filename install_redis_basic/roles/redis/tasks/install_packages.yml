@@ -1,0 +1,12 @@
+- name: Update packages
+  dnf:
+    name: '*'
+    state: latest
+
+- name: Install redis and firewalld
+  dnf:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - firewalld
+    - redis

@@ -1,0 +1,8 @@
+- name: Check redis is running
+  shell: rpm -q redis
+  register: rpm_check
+  failed_when: rpm_check.rc == 1
+
+- name: Show result
+  debug:
+    var: rpm_check

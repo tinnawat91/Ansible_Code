@@ -1,0 +1,42 @@
+---
+- name: Basic install redis
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Update packages
+      dnf:
+        name: '*'
+        state: latest
+
+    - name: Install redis and firewalld
+      dnf:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - firewalld
+        - redis
+
+    - name: Start services
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: true
+      loop:
+        - firewalld
+        - redis
+
+    - name: Allow redis service on firewall
+      firewalld:
+        service: redis
+        immediate: true
+        permanent: true
+        state: enabled
+
+    - name: Check redis is running
+      shell: rpm -q redis
+      register: rpm_check
+      failed_when: rpm_check.rc == 1
+
+    - name: Show result
+      debug:
+        var: rpm_check
