@@ -1,6 +1,6 @@
 - name: Update packages
   dnf:
-    name: '*'
+    name: "*"
     state: latest
 
 - name: Install redis and firewalld

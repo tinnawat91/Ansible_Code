@@ -1,7 +1,7 @@
 - name: Enable password of redis
   lineinfile:
     path: /etc/redis.conf
-    regexp: '^requirepass'
+    regexp: "^requirepass"
     line: requirepass password
 
 - name: Restart service
