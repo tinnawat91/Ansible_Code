@@ -1,0 +1,11 @@
+---
+# tasks file for sqlserver
+- block:
+    - import_tasks: install_packages.yml
+    - import_tasks: setup.yml
+    - import_tasks: config_firewall.yml
+
+  rescue:
+    - name: Block Error
+      debug:
+        msg: "Installation Error!!!. Please install manually."

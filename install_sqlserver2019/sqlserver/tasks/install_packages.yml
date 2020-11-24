@@ -1,0 +1,50 @@
+- name: Update packages
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Get mssql repo
+  get_url:
+    url: https://packages.microsoft.com/config/rhel/8/mssql-server-2019.repo
+    dest: /etc/yum.repos.d/mssql-server-2019.repo
+
+- name: Get prod repo
+  get_url:
+    url: https://packages.microsoft.com/config/rhel/8/prod.repo
+    dest: /etc/yum.repos.d/msprod.repo
+
+- name: Update repo
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Install python3-pip
+  dnf:
+    name: python3-pip
+    state: latest
+  
+- name: Install firewalld
+  dnf:
+    name: firewalld
+    state: latest
+
+- name: Install pexpect
+  pip:
+    name: pexpect
+
+- name: Install mssql-server
+  dnf:
+    name: mssql-server
+    state: latest
+
+- name: Install mssql-tools
+  expect:
+    command: dnf install -y mssql-tools
+    responses:
+      #Do you accept the license terms? \(Enter YES or NO\): "YES"
+      "\r\n": "YES"
+
+- name: Install unixODBC-devel
+  dnf:
+    name: unixODBC-devel
+    state: latest

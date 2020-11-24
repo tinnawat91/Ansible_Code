@@ -1,0 +1,12 @@
+- name: Start services
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Allow port on firewall
+  firewalld:
+    port: 1433/tcp
+    immediate: true
+    permanent: true
+    state: enabled

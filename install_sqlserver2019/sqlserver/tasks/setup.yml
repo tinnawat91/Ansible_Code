@@ -1,0 +1,12 @@
+- name: Gather service facts
+  service_facts:
+
+- name: Setup
+  expect:
+    command: /opt/mssql/bin/mssql-conf setup
+    responses:
+      Enter your edition\(1-8\): "2"
+      Do you accept the license terms? \[Yes/No\]: "Yes"
+      Enter the SQL Server system administrator password: "@Testdatabase1"
+      Confirm the SQL Server system administrator password: "@Testdatabase1"
+  when: ansible_facts.services["mssql-server.service"]["state"] != "running"
