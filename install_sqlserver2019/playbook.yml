@@ -1,0 +1,70 @@
+---
+- name: Install SQL Server 2019
+  hosts: localhost
+
+  tasks:
+    - name: Update packages
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Get mssql repo
+      get_url:
+        url: https://packages.microsoft.com/config/rhel/8/mssql-server-2019.repo
+        dest: /etc/yum.repos.d/mssql-server-2019.repo
+
+    - name: Get prod repo
+      get_url:
+        url: https://packages.microsoft.com/config/rhel/8/prod.repo
+        dest: /etc/yum.repos.d/msprod.repo
+
+    - name: Update repo
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Install pexpect
+      pip:
+        name: pexpect
+
+    - name: Install mssql-server
+      dnf:
+        name: mssql-server
+        state: latest
+
+    #- name: Install mssql-tools
+    #  dnf:
+    #    name: mssql-tools
+    #    state: latest
+
+    - name: Install mssql-tools
+      expect:
+        command: dnf install -y mssql-tools
+        responses:
+          #Do you accept the license terms? \(Enter YES or NO\): "YES"
+          "\r\n": "YES"
+
+    - name: Install unixODBC-devel
+      dnf:
+        name: unixODBC-devel
+        state: latest
+
+    - name: Gather service facts
+      service_facts:
+
+    - name: Setup
+      expect:
+        command: /opt/mssql/bin/mssql-conf setup
+        responses:
+          Enter your edition\(1-8\): "2"
+          Do you accept the license terms? \[Yes/No\]: "Yes"
+          Enter the SQL Server system administrator password: "@Testdatabase1"
+          Confirm the SQL Server system administrator password: "@Testdatabase1"
+      when: ansible_facts.services["mssql-server.service"]["state"] != "running"
+
+    - name: Allow port on firewall
+      firewalld:
+        port: 1433/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled

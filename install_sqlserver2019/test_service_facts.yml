@@ -1,0 +1,17 @@
+--- 
+- name: Test service facts
+  hosts: localhost
+  gather_facts: false
+  tasks:
+   # - name: Test
+    #  service_facts:
+    #  register: this
+
+    #- debug: var=ansible_facts.services["mssql-server.service"]["state"]
+    #  when: ansible_facts.services["mssql-server.service"] is defined
+
+    - name: package facts
+      package_facts:
+
+    - debug: var=ansible_facts.packages["mssql-tools"]
+      when: ansible_facts.packages["mssql-tools"] is defined
