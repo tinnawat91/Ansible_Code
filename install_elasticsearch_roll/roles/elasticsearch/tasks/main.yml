@@ -23,4 +23,4 @@
         
   rescue:
     - debug:
-        msg: "Installation Error!!!"
+        msg: "Installation Error!!!. Please install manually."
