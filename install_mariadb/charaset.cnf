@@ -1,0 +1,9 @@
+# create new
+# set default charaset
+# if not set, default is [latin1]
+# for the case of 4 bytes UTF-8, specify [utf8mb4]
+[mysqld]
+character-set-server = utf8mb4
+
+[client]
+default-character-set = utf8mb4

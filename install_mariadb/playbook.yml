@@ -1,0 +1,94 @@
+--- 
+- name: Install MariaDB 10.3
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Update packages
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Install MariaDB package
+      dnf:
+        name: mariadb-server
+        state: latest
+
+    - name: Copy charaset.cnf
+      copy:
+        src: charaset.cnf
+        dest: /etc/my.cnf.d/charaset.cnf
+
+    - name: Start service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Install firewalld
+      dnf:
+        name: firewalld
+        state: latest
+
+    - name: Start firewalld service
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Allow service on firewall
+      firewalld:
+        service: mysql
+        permanent: yes
+        immediate: yes
+        state: enabled
+
+    - name: Gather service facts
+      service_facts:
+
+    - name: Show result
+      debug:
+        var: ansible_facts.services["mariadb.service"]["state"]
+      
+    - name: Install python3-pip
+      dnf:
+        name: python3-pip
+        state: latest
+
+    - name: Install pexpect
+      pip:
+        name: pexpect
+        state: latest
+
+
+# TODO: if run again or root password is set => tasks will be stuct at this point(not failed)
+
+#? Root Password do not set before => First installation
+    - name: Secure MariaDB
+      expect:
+        command: mysql_secure_installation
+        responses:
+          Enter current password for root: ""
+          Set root password? : "Y"
+          #Change the root password? : "Y"
+          New password: "4321"
+          Re-enter new password: "4321"
+          Remove anonymous users?: "Y"
+          Disallow root login remotely?: "Y"
+          Remove test database and access to it?: "Y"
+          Reload privilege tables now?: "Y"
+     
+
+#? Root Password is set 
+    # - name: Secure MariaDB
+    #   expect:
+    #     command: mysql_secure_installation
+    #     responses:
+    #       Enter current password for root: "4321"
+    #       #Set root password? : "Y"
+    #       Change the root password? : "Y"
+    #       New password: "1234"
+    #       Re-enter new password: "1234"
+    #       Remove anonymous users?: "Y"
+    #       Disallow root login remotely?: "Y"
+    #       Remove test database and access to it?: "Y"
+    #       Reload privilege tables now?: "Y"  
