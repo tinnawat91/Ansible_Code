@@ -3,10 +3,12 @@
     name: "*"
     state: latest
 
-- name: Install redis and firewalld
+- name: Install redis 
   dnf:
-    name: "{{ item }}"
+    name: redis
     state: latest
-  loop:
-    - firewalld
-    - redis
+  
+- name: Install firewalld
+  dnf:
+    name: firewalld
+    state: latest

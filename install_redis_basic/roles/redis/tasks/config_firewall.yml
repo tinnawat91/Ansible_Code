@@ -1,11 +1,14 @@
-- name: Start services
+- name: Start firewall services
   service:
-    name: "{{ item }}"
+    name: firewalld
     state: started
     enabled: true
-  loop:
-    - firewalld
-    - redis
+
+- name: Start redis services
+  service:
+    name: redis
+    state: started
+    enabled: true
 
 - name: Allow redis service on firewall
   firewalld:
