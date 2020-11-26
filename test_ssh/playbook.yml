@@ -13,6 +13,9 @@
       template:
         src: ./template.j2
         dest: /tmp/test.yml
+        owner: root
+        group: elasticsearch
+        mode: 0660
     #    owner: tinnawat
     #    group: tinnawat
       #delegate_to: localhost

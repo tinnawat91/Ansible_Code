@@ -3,4 +3,17 @@ node.name: node-{{ ansible_facts['fqdn'] }}
 path.data: /var/lib/elasticsearch
 path.log: /var/log/elasticsearch
 network.host: {{ ansible_facts['default_ipv4']['address'] }}
-discovery.zen.ping.unicast.hosts: [{% for host in groups['nodes'] %} "{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}", {% endfor %}]
+discovery.zen.ping.unicast.hosts: [ "192.168.93.128"{% for host in groups['nodes'] %}, "{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}"{% endfor %}]
+{% if inventory_hostname in groups['data'] %}
+node.master: false 
+node.data: true 
+node.ingest: false 
+node.ml: false 
+cluster.remote.connect: false 
+{% elif inventory_hostname in groups['coordinate'] %}
+node.master: false 
+node.data: false 
+node.ingest: false 
+node.ml: false 
+cluster.remote.connect: false 
+{% endif %}

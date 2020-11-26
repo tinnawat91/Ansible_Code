@@ -1,5 +1,12 @@
 centos
 redhat
-[nodes]
+
+[data]
 centos
-redhat
+
+[coordinate]
+redhat 
+
+[nodes:children]
+data
+coordinate
