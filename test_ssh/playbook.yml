@@ -1,7 +1,19 @@
 ---
 - name: test facts
-  hosts: localhost
+  hosts: nodes
+  #gather_facts: false
   tasks:
-    - debug:
-        msg:
-          - "{{ ansible_all_ipv4_addresses }}"
+    # - debug:
+    #     var: ansible_default_ipv4.address
+    # - shell: whoami
+    #   register: this
+    # - debug: var=this.stdout
+
+    - name: test template
+      template:
+        src: ./template.j2
+        dest: /tmp/test.yml
+    #    owner: tinnawat
+    #    group: tinnawat
+      #delegate_to: localhost
+    

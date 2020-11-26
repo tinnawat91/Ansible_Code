@@ -1,0 +1,6 @@
+cluster.name: my-application
+node.name: node-{{ ansible_facts['fqdn'] }}
+path.data: /var/lib/elasticsearch
+path.log: /var/log/elasticsearch
+network.host: {{ ansible_facts['default_ipv4']['address'] }}
+discovery.zen.ping.unicast.hosts: [{% for host in groups['nodes'] %} "{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}", {% endfor %}]
