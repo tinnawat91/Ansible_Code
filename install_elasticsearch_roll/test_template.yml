@@ -1,0 +1,13 @@
+---
+- name: Test
+  hosts: master,data
+  tasks:
+    - name: Test copy
+      template:
+        #src: ./roles/elasticsearch/templates/template.j2
+        src: test.j2
+        dest: /home/tinnawat/Course/course/install_elasticsearch_roll/test.yml
+        owner: tinnawat
+        group: elasticsearch
+        mode: 0660
+      delegate_to: localhost

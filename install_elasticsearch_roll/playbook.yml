@@ -1,6 +1,5 @@
 ---
-- name: Configure web server
-  hosts: localhost
-  gather_facts: false
+- name: Install elasticsearch
+  hosts: master,data
   roles:
     - roles/elasticsearch

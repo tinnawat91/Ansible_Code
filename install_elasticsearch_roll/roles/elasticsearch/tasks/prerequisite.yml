@@ -1,0 +1,14 @@
+- name: Remove elasticsearch package
+  dnf:
+    name: elasticsearch
+    state: absent
+    
+- name: Remove /etc/elasticsearch
+  file:
+    path: /etc/elasticsearch
+    state: absent
+
+- name: Remove /var/lib/elasticsearch
+  file:
+    path: /var/lib/elasticsearch
+    state: absent

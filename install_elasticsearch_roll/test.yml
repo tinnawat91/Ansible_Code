@@ -1,0 +1,11 @@
+cluster.name: my-application
+node.name: node-centos
+path.data: /var/lib/elasticsearch
+path.log: /var/log/elasticsearch
+network.host: 192.168.93.140
+discovery.zen.ping.unicast.hosts: [ "192.168.93.140", "192.168.93.129", "192.168.93.130"]
+node.master: true
+node.data: false
+node.ingest: false 
+node.ml: false 
+cluster.remote.connect: false 
