@@ -1,16 +1,23 @@
 cluster.name: my-application
-node.name: node-{{ ansible_facts['fqdn'] }}
+{#node.name: node-{{ ansible_facts['fqdn'] }}#}
 path.data: /var/lib/elasticsearch
 path.logs: /var/log/elasticsearch
 network.host: {{ ansible_facts['default_ipv4']['address'] }}
+{# e.g minimum_master_nodes: 2 -> ต้องมี master 2 เครื่อง cluster ถึงจะทำงาน(ยังไม่แน่ใจ) #}
+{# เพราะถ้ามี master 1 เครื่อง เช็คผ่าน http://{ip}:9200 ได้ แต่เช็คผ่าน http://{ip}:9200/_cat/health?v -> return 503 #}
+discovery.zen.minimum_master_nodes: 1
+search.remote.connect: false
+xpack.ml.enabled: false
 discovery.zen.ping.unicast.hosts: [{% for host in groups['nodes'] %}"{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}"{% if loop.index < (groups['nodes']|length) %}, {% endif %}{% endfor %}]
 {% if inventory_hostname in groups['master'] %}
+node.name: master
 node.master: true
 node.data: false
 node.ingest: false 
 node.ml: false 
 cluster.remote.connect: false 
 {% elif inventory_hostname in groups['hot'] %}
+node.name: data
 node.master: false 
 node.data: true
 node.ingest: false 
@@ -18,6 +25,7 @@ node.ml: false
 cluster.remote.connect: false
 node.attr.box_type: hot
 {% elif inventory_hostname in groups['warm'] %}
+node.name: data
 node.master: false 
 node.data: true
 node.ingest: false 
@@ -25,6 +33,7 @@ node.ml: false
 cluster.remote.connect: false  
 node.attr.box_type: warm
 {% elif inventory_hostname in groups['coordinate'] %}
+node.name: coordinator
 node.master: false 
 node.data: false
 node.ingest: false 

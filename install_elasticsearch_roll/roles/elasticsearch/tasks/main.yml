@@ -1,15 +1,15 @@
 ---
 # tasks file for roles/elasticsearch
 - block:
-    - import_tasks: prerequisite.yml
+    - import_tasks: clear_environment.yml
     - import_tasks: config_repo.yml
     - import_tasks: install_packages.yml
     - import_tasks: config_firewall.yml
     - import_tasks: config_elasticsearch.yml
     
-    - name: Wait 1.30 minute
+    - name: Wait 1 minute
       wait_for:
-        timeout: 90
+        timeout: 60
     
     - name: Check elasticsearch
       uri:
@@ -22,7 +22,7 @@
 
     - name: Show result
       debug: 
-        var: this
+        var: this.status
         
   rescue:
     - debug:
