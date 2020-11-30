@@ -1,6 +1,7 @@
 ---
 # tasks file for roles/elasticsearch
 - block:
+    - import_tasks: prerequiresite.yml
     - import_tasks: clear_environment.yml
     - import_tasks: config_repo.yml
     - import_tasks: install_packages.yml

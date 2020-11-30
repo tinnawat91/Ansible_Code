@@ -2,3 +2,5 @@ discovery.zen.ping.unicast.hosts: [ "192.168.93.140", 192.168.93.131", 192.168.9
 discovery.zen.ping.unicast.hosts: ["192.168.93.140","192.168.93.131","192.168.93.129","192.168.93.130"]
 
 
+
+#UUID=b2075bce-c9b8-447d-9246-3438ea3dece2 swap                    swap    defaults        0 0

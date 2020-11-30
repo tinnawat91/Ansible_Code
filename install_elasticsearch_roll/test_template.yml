@@ -2,12 +2,25 @@
 - name: Test
   hosts: nodes
   tasks:
-    - name: Test copy
-      template:
-        #src: ./roles/elasticsearch/templates/template.j2
-        src: test.j2
-        dest: /home/tinnawat/Course/course/install_elasticsearch_roll/test.yml
-        owner: tinnawat
-        group: elasticsearch
-        mode: 0660
+    # - name: Test copy
+    #   template:
+    #     #src: ./roles/elasticsearch/templates/template.j2
+    #     src: test.j2
+    #     dest: /home/tinnawat/Course/course/install_elasticsearch_roll/test.yml
+    #     owner: tinnawat
+    #     group: elasticsearch
+    #     mode: 0660
+    #   delegate_to: localhost
+
+    # - name: Test line in file
+    #   lineinfile:
+    #     path: ./test.yml
+    #     line: last
+    #   delegate_to: localhost
+
+    - name: Test comment replace
+      replace:
+        path: ./test.yml
+        regexp: '(^UUID.*\w\d\sswap)'
+        replace: '#\1'
       delegate_to: localhost
