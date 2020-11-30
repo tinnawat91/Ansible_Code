@@ -1,5 +1,5 @@
 ---
 - name: Install elasticsearch
-  hosts: master,data
+  hosts: nodes
   roles:
     - roles/elasticsearch

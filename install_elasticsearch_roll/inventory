@@ -1,7 +1,7 @@
 centosa
 centosb
 centosc
-redhat
+centosd
 
 [master]
 centosa
@@ -13,7 +13,7 @@ centosb
 centosc
 
 [coordinate]
-redhat
+centosd
 
 [data:children]
 hot

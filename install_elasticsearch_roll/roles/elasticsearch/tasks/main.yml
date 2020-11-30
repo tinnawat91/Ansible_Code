@@ -7,9 +7,9 @@
     - import_tasks: config_firewall.yml
     - import_tasks: config_elasticsearch.yml
     
-    - name: Wait 1 minute
+    - name: Wait 1.30 minute
       wait_for:
-        timeout: 60
+        timeout: 90
     
     - name: Check elasticsearch
       uri:

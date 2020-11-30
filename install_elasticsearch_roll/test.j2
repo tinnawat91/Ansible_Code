@@ -1,33 +1,4 @@
-cluster.name: my-application
-node.name: node-{{ ansible_facts['fqdn'] }}
-path.data: /var/lib/elasticsearch
-path.log: /var/log/elasticsearch
-network.host: {{ ansible_facts['default_ipv4']['address'] }}
-discovery.zen.ping.unicast.hosts: [ "{% for host in groups['master'] %}{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}{% endfor %}"{% for host in groups['data'] %}, "{{ hostvars[host]['ansible_facts']['default_ipv4']['address']}}"{% endfor %}]
-{% if inventory_hostname in groups['master'] %}
-node.master: true
-node.data: false
-node.ingest: false 
-node.ml: false 
-cluster.remote.connect: false 
-{% elif inventory_hostname in groups['hot'] %}
-node.master: false 
-node.data: true
-node.ingest: false 
-node.ml: false 
-cluster.remote.connect: false
-node.attr.data=hot
-{% elif inventory_hostname in groups['warm'] %}
-node.master: false 
-node.data: true
-node.ingest: false 
-node.ml: false 
-cluster.remote.connect: false  
-node.attr.data=warm
-{% elif inventory_hostname in groups['coordinate'] %}
-node.master: false 
-node.data: false
-node.ingest: false 
-node.ml: false 
-cluster.remote.connect: false  
-{% endif %}
+discovery.zen.ping.unicast.hosts: [ "{% for host in groups['nodes'] %}{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}", {% endfor %}]
+discovery.zen.ping.unicast.hosts: [{% for i in groups['nodes'] %}"{{ hostvars[i]['ansible_facts']['default_ipv4']['address'] }}"{% if loop.index < (groups['nodes']|length) %},{% endif %}{% endfor %}]
+
+

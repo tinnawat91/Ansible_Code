@@ -1,6 +1,6 @@
 ---
 - name: Test
-  hosts: master,data
+  hosts: nodes
   tasks:
     - name: Test copy
       template:
