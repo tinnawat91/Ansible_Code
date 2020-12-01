@@ -1,6 +1,6 @@
 ---
 - name: test facts
-  hosts: nodes
+  hosts: test
   #gather_facts: false
   tasks:
     # - debug:
@@ -9,14 +9,21 @@
     #   register: this
     # - debug: var=this.stdout
 
-    - name: test template
-      template:
-        src: ./template.j2
-        dest: /tmp/test.yml
-        owner: root
-        group: elasticsearch
-        mode: 0660
+    # - name: test template
+    #   template:
+    #     src: ./template.j2
+    #     dest: /tmp/test.yml
+    #     owner: root
+    #     group: elasticsearch
+    #     mode: 0660
     #    owner: tinnawat
     #    group: tinnawat
       #delegate_to: localhost
+      - name: test
+        shell: whoami
+        register: this
+
+      - name: Show result
+        debug:
+          var: this.stdout
     

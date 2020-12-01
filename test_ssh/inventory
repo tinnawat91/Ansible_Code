@@ -1,6 +1,6 @@
 centos
 redhat
-
+test
 [data]
 centos
 
@@ -10,3 +10,6 @@ redhat
 [nodes:children]
 data
 coordinate
+
+[master]
+test

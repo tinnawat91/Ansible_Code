@@ -1,13 +1,13 @@
 centosa
-centosb
 centosc
 centosd
+center
 
 [master]
-centosa
+center
 
 [hot]
-centosb
+centosa
 
 [warm]
 centosc

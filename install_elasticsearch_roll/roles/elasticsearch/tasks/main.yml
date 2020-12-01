@@ -7,24 +7,22 @@
     - import_tasks: install_packages.yml
     - import_tasks: config_firewall.yml
     - import_tasks: config_elasticsearch.yml
-    
-    - name: Wait 1 minute
-      wait_for:
-        timeout: 60
-    
-    - name: Check elasticsearch
-      uri:
-        url: "http://{{ ansible_facts.default_ipv4.address }}:9200"
-        return_content: yes
-      register: this
-
-#? IF failed becuase elasticsearch.service not start 
-#? remove /var/lib/elasticsearch -> reinstall
-
-    - name: Show result
-      debug: 
-        var: this.status
         
   rescue:
     - debug:
         msg: "Installation Error!!!. Please install manually."
+
+
+- name: Wait 1 minute
+  wait_for:
+    timeout: 60
+    
+- name: Check elasticsearch
+  uri:
+    url: "http://{{ ansible_facts.default_ipv4.address }}:9200"
+    return_content: yes
+  register: this
+
+- name: Show result
+  debug: 
+    var: this.status

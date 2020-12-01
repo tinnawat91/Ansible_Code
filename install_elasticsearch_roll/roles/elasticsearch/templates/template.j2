@@ -15,22 +15,19 @@ node.master: true
 node.data: false
 node.ingest: false 
 node.ml: false 
-cluster.remote.connect: false 
 {% elif inventory_hostname in groups['hot'] %}
 node.name: data
 node.master: false 
 node.data: true
 node.ingest: false 
 node.ml: false 
-cluster.remote.connect: false
 node.attr.box_type: hot
 {% elif inventory_hostname in groups['warm'] %}
 node.name: data
 node.master: false 
 node.data: true
 node.ingest: false 
-node.ml: false 
-cluster.remote.connect: false  
+node.ml: false  
 node.attr.box_type: warm
 {% elif inventory_hostname in groups['coordinate'] %}
 node.name: coordinator
@@ -38,5 +35,4 @@ node.master: false
 node.data: false
 node.ingest: false 
 node.ml: false 
-cluster.remote.connect: false  
 {% endif %}
