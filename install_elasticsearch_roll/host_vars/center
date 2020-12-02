@@ -1,7 +1,0 @@
-ansible_host: 192.168.93.128
-ansible_user: tinnawat
-ansible_become: yes
-ansible_become_method: sudo
-ansible_become_user: root
-ansible_become_password: tar827746
-
