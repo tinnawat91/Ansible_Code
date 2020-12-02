@@ -3,9 +3,9 @@ cluster.name: my-application
 path.data: /var/lib/elasticsearch
 path.logs: /var/log/elasticsearch
 network.host: {{ ansible_facts['default_ipv4']['address'] }}
-{# e.g minimum_master_nodes: 2 -> ต้องมี master 2 เครื่อง cluster ถึงจะทำงาน(ยังไม่แน่ใจ) #}
+{# e.g minimum_master_nodes: 2 -> ต้องมี master 2 เครื่อง cluster ถึงจะทำงาน #}
 {# เพราะถ้ามี master 1 เครื่อง เช็คผ่าน http://{ip}:9200 ได้ แต่เช็คผ่าน http://{ip}:9200/_cat/health?v -> return 503 #}
-discovery.zen.minimum_master_nodes: 1
+discovery.zen.minimum_master_nodes: 2
 search.remote.connect: false
 xpack.ml.enabled: false
 discovery.zen.ping.unicast.hosts: [{% for host in groups['nodes'] %}"{{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}"{% if loop.index < (groups['nodes']|length) %}, {% endif %}{% endfor %}]
@@ -16,8 +16,9 @@ node.data: false
 node.ingest: false 
 node.ml: false 
 {% elif inventory_hostname in groups['hot'] %}
+{# make this node to master node because it must have at least 2 master to start cluster #}
 node.name: data
-node.master: false 
+node.master: true
 node.data: true
 node.ingest: false 
 node.ml: false 
