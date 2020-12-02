@@ -1,19 +1,16 @@
-centosa
-centosc
-centosd
-center
+cent[a:d]
 
 [master]
-center
+centa
 
 [hot]
-centosa
+centb
 
 [warm]
-centosc
+centc
 
 [coordinate]
-centosd
+centd
 
 [data:children]
 hot
